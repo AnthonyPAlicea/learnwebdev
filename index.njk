@@ -1,0 +1,299 @@
+---
+metaTitle: Full Stack, Front End, Back End Developer Roadmap by Tony Alicea
+og_image: 'assets/reactcourseog.png'
+---
+
+{% extends 'page.njk' %}
+
+{% block head %}
+<style>
+  /* General styling for the countdown container */
+.countdown {
+  display: flex;
+  gap: 10px;
+  font-weight: bold;
+  padding: 10px 20px;
+  justify-content: center;
+  margin-block-end: 1rem;
+}
+
+.enroll-form > .countdown {
+  margin-block-start: 1rem;
+  margin-block-end: 0;
+}
+
+/* Styling for each time unit (days, hours, etc.) */
+.countdown span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 40px;
+}
+
+/* Add labels below the numbers for better clarity */
+.countdown span::after {
+  content: attr(data-label);
+  font-size: 12px;
+  font-weight: normal;
+  margin-top: 4px;
+}
+
+/* Adjust for smaller screens */
+@media (max-width: 600px) {
+  .countdown {
+    font-size: 16px;
+    gap: 5px;
+  }
+
+  .countdown span {
+    min-width: 30px;
+  }
+}
+
+/* Roadmap specific styles */
+.roadmap-path {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* Remove gap, manage spacing with step margins */
+  position: relative; /* For the SVG (which is absolute) and steps */
+  padding: 2rem 0;
+  /* min-height: 1200px; */ /* Removed */
+}
+
+/* Diagnostic: Force overflow visible on path and its direct parent section - REMOVED */
+/*
+.roadmap-path,
+section.container.roadmap {
+  overflow: visible !important;
+}
+*/
+
+.roadmap-svg {
+  position: absolute; 
+  left: 50%; 
+  top: 0; 
+  transform: translateX(-50%); 
+  z-index: 1; 
+  width: 60px; /* Match SVG width attribute */
+  height: 100%; /* Take full height of parent .roadmap-path */
+  /* background-color: rgba(255, 0, 0, 0.2); */ /* Removed diagnostic background */
+  /* margin: 0 auto; */ /* Removed, not needed for absolute */
+}
+
+.roadmap-marker {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the marker on its (left, top) point */
+  width: 16px;
+  height: 16px;
+  background-color: var(--card-background-color, #f9f9f9);
+  border: 3px solid var(--pico-color-grey-600, #5e5e5e);
+  border-radius: 50%;
+  z-index: 2; /* Above the SVG path (z-index:1), same level as step cards (z-index:2) */
+}
+
+.roadmap-step {
+  border: 1px solid var(--card-border-color, #ddd);
+  padding: 1.5rem;
+  border-radius: var(--border-radius, 8px);
+  background-color: var(--card-background-color, #f9f9f9);
+  box-shadow: var(--card-box-shadow, 0 2px 4px rgba(0,0,0,0.1));
+  position: relative; /* For pseudo-elements and z-index */
+  width: 45%; /* Each step takes less than half width */
+  margin-bottom: 2rem; /* Space between steps vertically */
+  z-index: 2; /* Steps above the central line / SVG */
+}
+
+.roadmap-step p {
+  margin-bottom: 0;
+  color: #333; /* Dark color for text on light card background */
+}
+
+/* Alternating steps */
+.roadmap-step:nth-child(odd) {
+  align-self: flex-start;
+  margin-left: 5%; /* Push a bit away from the start */
+}
+
+.roadmap-step:nth-child(even) {
+  align-self: flex-end;
+  margin-right: 5%; /* Push a bit away from the end */
+}
+
+/* Connector dots/circles on the central line - REMOVED */
+/*
+.roadmap-step::before {
+  content: '';
+  position: absolute;
+  top: 1.5rem; 
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--card-background-color, #f9f9f9);
+  border: 4px solid var(--primary, #3366cc);
+  z-index: 3; 
+}
+
+.roadmap-step:nth-child(odd)::before {
+  right: -10px; 
+}
+
+.roadmap-step:nth-child(even)::before {
+  left: -10px;
+}
+*/
+
+.roadmap-step h3 {
+  margin-top: 0;
+  color: var(--primary, #3366cc); /* Using PicoCSS primary color variable */
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25em 0.6em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--border-radius, 8px);
+  background-color: var(--secondary, #6c757d); /* PicoCSS secondary color */
+  color: #fff;
+  margin-left: 0.5rem;
+}
+
+.roadmap-step.coming-soon .badge {
+  background-color: var(--muted-border-color, #adb5bd);
+}
+
+.roadmap-step.book .badge {
+  background-color: #5cb85c; /* A green color for books */
+  content: "Book"; /* Adding text for book badge if not in HTML */
+}
+
+.badge-book {
+  background-color: #5cb85c; /* A green color for books */
+  color: #fff;
+}
+
+/* Add a specific badge for books if not done in HTML */
+/* REMOVED this rule as we are now using explicit badges 
+.roadmap-step.book h3::after {
+ content: " (Book)";
+ font-size: 0.8em;
+ font-weight: normal;
+ color: #555;
+}
+*/
+</style>
+{% endblock %}
+
+{% block body %}
+<hgroup class="container">
+  <h1>How Can You Learn Full Stack Web Development?</h1>
+  <p>Embark on a journey from foundational knowledge to advanced skills. This roadmap guides you through a curated sequence of courses, each designed to help you deeply understand web development, not just mimic tutorials. Transform yourself into a confident, professional full-stack developer.</p>
+  <p class="credit"><img src="assets/tonyalicea.png" style="height: 30px;" /> &nbsp;&nbsp;Roadmap by Tony Alicea (Udemy and Pluralsight Instructor - 360,000+ students)</p>
+</hgroup>
+<hr />
+
+<section class="container">
+  <p style="font-size: 1.15rem;">Ready to truly master web development?</b></p>
+  <p>Many developers find themselves stuck in a cycle of tutorial-following, gaining superficial knowledge without the deep understanding that builds true skill and confidence. This roadmap is different.</p>
+  <p>Each course is a deliberate step towards comprehensive expertise, focusing on the 'why' and 'how' things work under the hood. From the fundamentals of HTML & CSS to the intricacies of modern frameworks and backend systems, you'll build an accurate mental model – the most powerful tool a developer can possess.</p>
+  <p>I've designed this path based on years of experience and a passion for demystifying complex topics. Let's build your expertise, together.</p>
+</section>
+
+<section class="container roadmap">
+  <h2>Your Learning Journey</h2>
+  <p>Follow these steps to become a well-rounded developer who truly understands the craft.</p>
+  <div class="roadmap-path">
+    <svg class="roadmap-svg" width="60" viewBox="0 0 60 1180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M 30 54 Q 10 114, 30 174 Q 50 234, 30 294 Q 10 354, 30 414 Q 50 474, 30 534 Q 10 594, 30 654 Q 50 714, 30 774 Q 10 834, 30 894 Q 50 954, 30 1014 Q 10 1074, 30 1134" fill="none" stroke="var(--pico-color-grey-600, #5e5e5e)" stroke-width="32"/>
+      <path d="M 30 54 Q 10 114, 30 174 Q 50 234, 30 294 Q 10 354, 30 414 Q 50 474, 30 534 Q 10 594, 30 654 Q 50 714, 30 774 Q 10 834, 30 894 Q 50 954, 30 1014 Q 10 1074, 30 1134" fill="none" stroke="var(--pico-color-yellow-100, #f2df0d)" stroke-width="2" stroke-dasharray="8, 8"/>
+    </svg>
+    <div class="roadmap-marker" style="top: calc(54 / 1180 * 100%);"></div>
+    <div class="roadmap-marker" style="top: calc(174 / 1180 * 100%);"></div>
+    <div class="roadmap-marker" style="top: calc(294 / 1180 * 100%);"></div>
+    <div class="roadmap-marker" style="top: calc(414 / 1180 * 100%);"></div>
+    <div class="roadmap-marker" style="top: calc(534 / 1180 * 100%);"></div>
+    <div class="roadmap-marker" style="top: calc(654 / 1180 * 100%);"></div>
+    <div class="roadmap-marker" style="top: calc(774 / 1180 * 100%);"></div>
+    <div class="roadmap-marker" style="top: calc(894 / 1180 * 100%);"></div>
+    <div class="roadmap-marker" style="top: calc(1014 / 1180 * 100%);"></div>
+    <div class="roadmap-marker" style="top: calc(1134 / 1180 * 100%);"></div>
+    <div class="roadmap-step">
+      <h3>1. Understanding HTML and CSS</h3>
+      <p>The foundational building blocks of the web. Learn how browsers interpret your code to render interfaces.</p>
+      <!-- We can add links and more details later -->
+    </div>
+    <div class="roadmap-step">
+      <h3>2. JavaScript: Understanding the Weird Parts</h3>
+      <p>Dive deep into the core concepts of JavaScript, beyond the syntax, to truly understand closures, prototypal inheritance, and more.</p>
+    </div>
+    <div class="roadmap-step">
+      <h3>3. JavaScript: Understanding ES6 and Beyond</h3>
+      <p>Master modern JavaScript features to write cleaner, more efficient, and powerful code.</p>
+    </div>
+    <div class="roadmap-step">
+      <h3>4. Learn and Understand NodeJS</h3>
+      <p>Take JavaScript to the server-side. Understand its event loop, non-blocking I/O, and how to build scalable applications.</p>
+    </div>
+    <div class="roadmap-step coming-soon">
+      <h3>5. Relational Databases and SQL <span class="badge">Coming Soon</span></h3>
+      <p>Learn how to design, manage, and query relational databases, a critical skill for backend development.</p>
+    </div>
+    <div class="roadmap-step coming-soon">
+      <h3>6. Understanding Modern JavaScript Frameworks <span class="badge">Coming Soon</span></h3>
+      <p>Explore popular frameworks, understanding their core principles, performance characteristics, and when to use them.</p>
+    </div>
+    <div class="roadmap-step">
+      <h3>7. Understanding React</h3>
+      <p>Go beyond surface-level React. Understand its reconciliation algorithm, Fiber architecture, and hooks in-depth.</p>
+    </div>
+    <div class="roadmap-step book">
+      <h3>8. Normal UI <span class="badge badge-book">Book</span></h3>
+      <p>A practical guide to improving web application UX, making your applications intuitive and user-friendly.</p>
+    </div>
+    <div class="roadmap-step">
+      <h3>9. Team Dynamics and Soft Skills for Developers</h3>
+      <p>Technical skills are crucial, but so is working effectively in a team. Learn communication, collaboration, and leadership.</p>
+    </div>
+    <div class="roadmap-step book">
+      <h3>10. How to Build the Right Software <span class="badge badge-book">Book</span></h3>
+      <p>Before writing code, understand the 'why'. Learn to ask the right questions and build solutions that truly meet user needs.</p>
+    </div>
+  </div>
+</section>
+
+<!--
+<section class="container">
+  <h2>FAQs</h2>
+  <details>
+    <summary>How do team licenses work?</summary>
+    Within 24 hours of purchase you'll receive a list of links, one for each license. Each team member may then use their own link to enroll for free with their own login.
+  </details>
+  <details>
+    <summary>Do you offer Purchasing Power Parity (PPP) or student discounts?</summary>
+    Yes, I believe in PPP and student discounts. You can <a href="https://tonyalicea.dev/courses/understanding-react-ppp/">fill out a request form here</a>. PPP coupons are sent out every couple of weeks.
+  </details>
+  <details>
+    <summary>Is this a subscription?</summary>
+    No. This is a one time purchase for lifetime access to the course and all future updates.
+  </details>
+</section>
+-->
+
+<!--
+<script>
+  /*
+  const targetURL = 'https://dontimitateunderstand.com/purchase';
+  const productID = '4876170';
+// ... existing code ...
+  startCountdown('.countdown');
+  */
+});
+</script> 
+-->
+
+{% endblock %}
